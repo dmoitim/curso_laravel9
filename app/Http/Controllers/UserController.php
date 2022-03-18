@@ -15,6 +15,9 @@ class UserController extends Controller
 
     public function show($id)
     {
-        return view('users.show');
+        if (!$user = User::find($id))
+            return redirect()->route('users.index');
+
+        return view('users.show', compact('user'));
     }
 }
