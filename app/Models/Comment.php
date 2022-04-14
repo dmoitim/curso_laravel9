@@ -12,7 +12,7 @@ class Comment extends Model
     // Se eu tivesse uma tabela com um nome que não é o padrão, utilizar a linha abaixo
     // protected $table = 'comentarios';
 
-    protected $filable = [
+    protected $fillable = [
         'body',
         'visible'
     ];
