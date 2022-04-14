@@ -53,4 +53,12 @@ class User extends Authenticatable
 
         return $users;
     }
+
+    public function comments()
+    {
+        // Relacionamento com a tabela comments, se fossem campos com nomes diferentes, seria igual a linha abaixo
+        // return $this->hasMany(Comment::class, 'user_id', 'id');
+
+        return $this->hasMany(Comment::class);
+    }
 }
