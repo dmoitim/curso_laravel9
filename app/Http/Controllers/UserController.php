@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUpdateUserFormRequest;
 use App\Models\User;
+use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -40,6 +42,10 @@ class UserController extends Controller
         $data = $request->all();
         $data['password'] = bcrypt($data['password']);
 
+        if ($request->image)
+            $data['image'] = $request->image->store('users'); // Salva com nome aleatório
+            //$data['image'] = $request->image->storeAs('users', now() . ".{$request->image->getClientOriginalExtension()}"); // Salva com nome desejado
+
         User::create($data);
 
         return redirect()->route('users.index');
@@ -62,6 +68,13 @@ class UserController extends Controller
 
         if ($request->password)
             $data['password'] = bcrypt($request->password);
+
+        if ($request->image) {
+            if ($user->image && Storage::exists($user->image)) // Se o valor é diferente de null e existe a imagem na pasta
+                Storage::delete($user->image);
+
+            $data['image'] = $request->image->store('users'); // Salva com nome aleatório
+        }
 
         $user->update($data);
 
